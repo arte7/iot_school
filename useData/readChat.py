@@ -1,7 +1,6 @@
-import json
 import requests
 import time
-import mysql.connector
+import thingspeak
 
 
 accessToken = "NmFjOWViZWYtMTZjMy00Y2UxLWI3YmMtMTVkMzg2OTNhM2YyZmZiN2NhMGQtZTc2"
@@ -29,8 +28,7 @@ def get_messages():
 
         print(text)
 
-        if ("temperature" in text) & ("humidity" in text):
-            print("temp")
+        if ("Temperature" in text) & ("Humidity" in text) & (obj['personId'] != "Y2lzY29zcGFyazovL3VzL1BFT1BMRS85MWUyNGRjMC0yMjE1LTQ2ZDMtYTE0Yi01MTBmYTgyZDM1NTE"):
 
             if oldresp == {}:
                 write_to_db(obj)
@@ -38,42 +36,31 @@ def get_messages():
                 write_to_db(obj)
 
             oldresp = resp.json()['items'][0]
-            print(oldresp)
 
         time.sleep(10)
 
 
 def write_to_db(obj):
-    print("nothing")
-    text = ""
-    data = '{"text": "Die Daten '+text+' wurden in die DB geschrieben", "roomId": "'+roomId+'"}'
 
-    # ------------
+    # holen der daten aus dem String
+    text = str(obj['text']).split()
 
-    connect = mysql.connector.connect(user='root', host='127.0.0.1', database='projekt')
-    cursor = connect.cursor()
+    data = '{"text": "Die Daten '+obj['text']+' wurden übermittlet", "roomId": "'+roomId+'"}'
 
-    add_data = ("INSERT INTO clima_data (humidity,temperature) VALUES (%(humidity)s,%(temperature)s)")
+    channel_id = 496768
+    write_key = "PZVVZFO8R5YJY0D7"
+    read_key = "MO17791BOVEODHFV"
 
-    obj_data = {
-        'humidity': "12",
-        'temperature': "13"
-    }
+    channel = thingspeak.Channel(id=channel_id, write_key=write_key, api_key=read_key)
+    tsresponse = channel.update({'field1': text[1], 'field2': text[3]})
 
-    cursor.execute(add_data, obj_data)
+    read = channel.get({})
+    print("Read: ", read)
 
-    emp_no = cursor.lastrowid
 
-    connect.commit()
-    cursor.close()
-    connect.close()
-
-    # ------------
-
-    print (data)
     iswritten = requests.post(url+"/messages", data=data, headers=headers)
 
-    print (iswritten)
+    print(iswritten.status_code)
     if iswritten.status_code != 200:
         print("Fail")
 
