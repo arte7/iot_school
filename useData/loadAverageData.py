@@ -13,7 +13,7 @@ write_key = "PZVVZFO8R5YJY0D7"
 read_key = "MO17791BOVEODHFV"
 headers = {"Authorization": "Bearer " + accessToken, "Content-Type": "application/json; charset=utf-8"}
 
-def send_median():
+def send_average():
 
     lastchatentry = requests.get(url+"?roomId="+chatroomId+"&max=1", headers=headers)
     entrytext = lastchatentry.json()['items'][0]['text']
@@ -21,10 +21,12 @@ def send_median():
     if "Die Daten Temperatur" in entrytext:
         data = get_average()
         send_message(data)
+        send_raw_data(data)
 
     elif entrytext == "!tempt":
         data = get_average()
         send_message(data)
+        send_raw_data(data)
 
 
 def get_average():
@@ -49,9 +51,21 @@ def send_message(data):
     print(str(req.status_code) + " " + str(req.reason))
 
 
+def send_raw_data(data):
+    data = {
+        'roomId': str(dataroomId),
+        'accessToken': str(accessToken),
+        'text': '{"avgTemperature": ' + data['field1'] + ', "avgHumidity": ' + data['field2'] + '}'
+    }
+    print(data)
+
+    req = requests.post(url, json=data, headers=headers)
+    print(str(req.status_code) + " " + str(req.reason))
+    print(req.text)
+
 def main():
     while True:
-        send_median()
+        send_average()
         time.sleep(1)
 
 
