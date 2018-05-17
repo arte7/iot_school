@@ -46,8 +46,8 @@ def write_to_db(obj):
 
     # holen der daten aus dem String
     text = json.loads(obj['text'])
-    data = '{"text": "Die Daten Temperatur: ' + str(text['Temperature']) + '°C  und Luftfeuchtigkeit: ' \
-           + str(text['Humidity']) + '% wurden übermittlet", "roomId": "'+chatroomId+'"}'
+    data = '{"html": "Die Daten Temperatur: ' + str(text['Temperature']) + ' &deg;C  und Luftfeuchtigkeit: ' \
+           + str(text['Humidity']) + '% wurden &uuml;bermittlet", "roomId": "'+chatroomId+'"}'
 
     channel_id = 496768
     write_key = "PZVVZFO8R5YJY0D7"
@@ -59,11 +59,12 @@ def write_to_db(obj):
     read = channel.get({})
     print("Read: ", read)
     print(data)
+    print(url+"/messages" + "    " +  data + "    " + json.dumps(headers))
+
     iswritten = requests.post(url+"/messages", data=data, headers=headers)
 
-    print(iswritten.status_code)
     if iswritten.status_code != 200:
-        print("Fail")
+        print("Fehler beim Update Benachrichtigung senden "+ iswritten.status_code + iswritten.text)
 
 
 def main():
