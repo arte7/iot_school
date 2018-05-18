@@ -9,10 +9,10 @@ dataroomId = "ROOM_ID_ROOM_1"
 chatroomId = "ROOM_ID_ROOM_2"
 url = "https://api.ciscospark.com/v1"
 headers = {"Authorization": "Bearer " + accessToken, "Content-Type": "application/json; charset=utf-8"}
-user = "USER_ID_USER_1"
 channel_id = "THINGSPEAK_CHANNEL_ID_ALS_INT"
 write_key = "THINGSPEAK_WRITE_KEY"
 read_key = "THINGSPEAK_READ_KEY"
+user = "USER_ID_USER_2"
 
 
 def get_messages():
@@ -34,7 +34,7 @@ def get_messages():
 
         print(text)
 
-        if ("Temperature" in text) & ("Humidity" in text) & (obj['personId'] != user):
+        if ("Temperature" in text) & ("Humidity" in text) & (obj['personId'] == user):
 
             if oldresp == {}:
                 write_to_db(obj)
