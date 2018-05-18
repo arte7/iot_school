@@ -22,9 +22,9 @@ SENSOR_PIN = 12
 
 sensor = Adafruit_DHT.DHT11
 pin = 4
-accessToken = "NDNjNTc5NDUtYTNhMy00N2NmLTliOTUtYWFlMmRlYWVmNTlhNmIzOGI2OWUtNjk2"
+accessToken = "accessToken"
 
-roomId = "Y2lzY29zcGFyazovL3VzL1JPT00vNGUyNjE1MjAtNTkwNC0xMWU4LWIwYTEtNmI0Y2M0NzNkZDVj"
+roomId = "roomId"
 
 GPIO.setup(SENSOR_PIN, GPIO.IN)
 
