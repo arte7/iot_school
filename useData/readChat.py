@@ -4,11 +4,15 @@ import thingspeak
 import json
 
 
-accessToken = "NmFjOWViZWYtMTZjMy00Y2UxLWI3YmMtMTVkMzg2OTNhM2YyZmZiN2NhMGQtZTc2"
-dataroomId = "Y2lzY29zcGFyazovL3VzL1JPT00vNGUyNjE1MjAtNTkwNC0xMWU4LWIwYTEtNmI0Y2M0NzNkZDVj"
-chatroomId = "Y2lzY29zcGFyazovL3VzL1JPT00vODMzYzhiYTAtNTc1NS0xMWU4LTk1NDMtN2QxYzA5ZTViN2Ux"
+accessToken = "TOKEN_USER_1"
+dataroomId = "ROOM_ID_ROOM_1"
+chatroomId = "ROOM_ID_ROOM_2"
 url = "https://api.ciscospark.com/v1"
 headers = {"Authorization": "Bearer " + accessToken, "Content-Type": "application/json; charset=utf-8"}
+user = "USER_ID_USER_1"
+channel_id = "THINGSPEAK_CHANNEL_ID_ALS_INT"
+write_key = "THINGSPEAK_WRITE_KEY"
+read_key = "THINGSPEAK_READ_KEY"
 
 
 def get_messages():
@@ -30,7 +34,7 @@ def get_messages():
 
         print(text)
 
-        if ("Temperature" in text) & ("Humidity" in text) & (obj['personId'] != "Y2lzY29zcGFyazovL3VzL1BFT1BMRS85MWUyNGRjMC0yMjE1LTQ2ZDMtYTE0Yi01MTBmYTgyZDM1NTE"):
+        if ("Temperature" in text) & ("Humidity" in text) & (obj['personId'] != user):
 
             if oldresp == {}:
                 write_to_db(obj)
@@ -49,22 +53,16 @@ def write_to_db(obj):
     data = '{"html": "Die Daten Temperatur: ' + str(text['Temperature']) + ' &deg;C  und Luftfeuchtigkeit: ' \
            + str(text['Humidity']) + '% wurden &uuml;bermittlet", "roomId": "'+chatroomId+'"}'
 
-    channel_id = 496768
-    write_key = "PZVVZFO8R5YJY0D7"
-    read_key = "MO17791BOVEODHFV"
-
     channel = thingspeak.Channel(id=channel_id, write_key=write_key, api_key=read_key)
     tsresponse = channel.update({'field1': text['Temperature'], 'field2': text['Humidity']})
 
     read = channel.get({})
     print("Read: ", read)
-    print(data)
-    print(url+"/messages" + "    " +  data + "    " + json.dumps(headers))
 
     iswritten = requests.post(url+"/messages", data=data, headers=headers)
 
     if iswritten.status_code != 200:
-        print("Fehler beim Update Benachrichtigung senden "+ iswritten.status_code + iswritten.text)
+        print("Fehler beim Update Benachrichtigung senden " + iswritten.status_code + iswritten.text)
 
 
 def main():

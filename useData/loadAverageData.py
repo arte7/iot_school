@@ -4,13 +4,13 @@ import json
 import time
 
 
-accessToken = "NmFjOWViZWYtMTZjMy00Y2UxLWI3YmMtMTVkMzg2OTNhM2YyZmZiN2NhMGQtZTc2"
-dataroomId = "Y2lzY29zcGFyazovL3VzL1JPT00vNGUyNjE1MjAtNTkwNC0xMWU4LWIwYTEtNmI0Y2M0NzNkZDVj"
-chatroomId = "Y2lzY29zcGFyazovL3VzL1JPT00vODMzYzhiYTAtNTc1NS0xMWU4LTk1NDMtN2QxYzA5ZTViN2Ux"
+accessToken = "TOKEN_USER_1"
+dataroomId = "ROOM_ID_ROOM_1"
+chatroomId = "ROOM_ID_ROOM_2"
 url = "https://api.ciscospark.com/v1/messages"
-channel_id = 496768
-write_key = "PZVVZFO8R5YJY0D7"
-read_key = "MO17791BOVEODHFV"
+channel_id = "THINGSPEAK_CHANNEL_ID_ALS_INT"
+write_key = "THINGSPEAK_WRITE_KEY"
+read_key = "THINGSPEAK_READ_KEY"
 headers = {"Authorization": "Bearer " + accessToken, "Content-Type": "application/json; charset=utf-8"}
 
 def send_average():
